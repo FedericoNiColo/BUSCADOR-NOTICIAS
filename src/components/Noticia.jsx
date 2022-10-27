@@ -34,7 +34,28 @@ const Noticia = ({ noticia }) => {
                     >
                         {title}
                     </Typography>
+                    <Typography
+                        variant='body2' color='div'
+                    >
+                        {description}
+                    </Typography>
                 </CardContent>
+
+                <CardActions>
+                    <Link 
+                    href={url} 
+                    target='_blank'
+                    variant='button'
+                    width={'100%'}
+                    textAlign={'start'}
+                    marginX={1.5}
+                    sx={{
+                        textDecoration: 'none'
+                    }}
+                    >
+                        Leer Noticia
+                    </Link>
+                </CardActions>
             </Card>
         </Grid >
     )
