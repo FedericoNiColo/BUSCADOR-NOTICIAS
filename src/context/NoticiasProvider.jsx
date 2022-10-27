@@ -7,14 +7,30 @@ const NoticiasProvider = ({ children }) => {
 
     const [categoria, setCategoria] = useState('general')
     const [noticias, setNoticias] = useState([])
-    const [paginas, setPaginas] = useState(1)
+    const [pagina, setPagina] = useState(1)
     const [totalNoticias, setTotalNoticias] = useState(0)
 
     useEffect(() => {
 
         const consultarAPI = async () => {
             const url = `https://newsapi.org/v2/top-headlines?
-            country=mx&category=${categoria}&apiKey=${import.meta.env.VITE_API_KEY}`
+            country=ar&category=${categoria}&language=es&apiKey=${import.meta.env.VITE_API_KEY}`
+
+            const { data } = await axios(url)
+            setNoticias(data.articles);
+            console.log(data)
+            setTotalNoticias(data.totalResults)
+            setPagina(1)
+        }
+        consultarAPI()
+
+    }, [categoria])
+
+    useEffect(() => {
+
+        const consultarAPI = async () => {
+            const url = `https://newsapi.org/v2/top-headlines?
+            country=ar&category=${categoria}&page=${pagina}&language=es&apiKey=${import.meta.env.VITE_API_KEY}`
 
             const { data } = await axios(url)
             setNoticias(data.articles);
@@ -23,10 +39,14 @@ const NoticiasProvider = ({ children }) => {
         }
         consultarAPI()
 
-    }, [categoria])
+    }, [pagina])
 
     const handleChangeCategoria = e => {
         setCategoria(e.target.value)
+    }
+
+    const handleChangePagina = (e, valor) => {
+        setPagina(valor)
     }
 
     return (
@@ -35,7 +55,10 @@ const NoticiasProvider = ({ children }) => {
                 setCategoria,
                 categoria,
                 handleChangeCategoria,
-                noticias
+                noticias,
+                totalNoticias,
+                handleChangePagina,
+                pagina
             }}
         >
             {children}
